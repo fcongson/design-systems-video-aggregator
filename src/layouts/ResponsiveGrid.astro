@@ -1,0 +1,47 @@
+---
+const {
+  gridLayoutGap = "10px",
+  gridColumnCount = 6,
+  gridItemMinWidth = "250px",
+} = Astro.props;
+---
+
+<div
+  class="responsive-grid"
+  style={{
+    "--grid-layout-gap": gridLayoutGap,
+    "--grid-column-count": gridColumnCount,
+    "--grid-item--min-width": gridItemMinWidth,
+  }}
+>
+  <slot />
+</div>
+
+<style>
+  .responsive-grid {
+    /* https://css-tricks.com/an-auto-filling-css-grid-with-max-columns/ */
+
+    /**
+   * Calculated values.
+   */
+    --gap-count: calc(var(--grid-column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+    --grid-item--max-width: calc(
+      (100% - var(--total-gap-width)) / var(--grid-column-count)
+    );
+
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr)
+    );
+    grid-gap: var(--grid-layout-gap);
+    padding: 1rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .responsive-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,26 +1,29 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
-import VideoDuration from "../components/VideoDuration.astro";
+import { formatDuration } from "../utils/formatDuration";
 
 import { Image } from "astro:assets";
 type Media = CollectionEntry<"media">;
 type Props = Media["data"] & { slug?: Media["slug"] };
 
-const {
-  title,
-  description,
-  publishedAt,
-  updatedDate,
-  image,
-  duration,
-  videoUrl,
-  poster,
-  slug,
-  tags,
-  categories,
-} = Astro.props;
+const { title, publishedAt, duration, poster, slug } = Astro.props;
 ---
+
+<div class="media-item">
+  <a href={`/${slug}`} class="media-link">
+    <div class="media-image">
+      <Image src={poster} alt={title} />
+      {duration && <div class="duration">{formatDuration(duration)}</div>}
+    </div>
+    <div class="media-content">
+      <h4 class="title">{title}</h4>
+      <span class="date">
+        <FormattedDate date={publishedAt} />
+      </span>
+    </div>
+  </a>
+</div>
 
 <style>
   /* Style for each media item */
@@ -77,7 +80,7 @@ const {
     right: 0.5rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     .media-link {
       display: grid;
       grid-template-columns: 2fr 3fr;
@@ -94,23 +97,3 @@ const {
     }
   }
 </style>
-<div class="media-item">
-  <a href={`/${slug}`} class="media-link">
-    <div class="media-image">
-      <Image src={poster} alt={title} />
-      {
-        duration && (
-          <div class="duration">
-            <VideoDuration durationStr={duration} />
-          </div>
-        )
-      }
-    </div>
-    <div class="media-content">
-      <h4 class="title">{title}</h4>
-      <span class="date">
-        <FormattedDate date={publishedAt} />
-      </span>
-    </div>
-  </a>
-</div>

@@ -68,6 +68,11 @@ function generateMdxFile(video, folderPath) {
     fs.mkdirSync(folderPath, { recursive: true });
   }
 
+  // Skip if index.mdx file already exists
+  if (fs.existsSync(indexPath)) {
+    return;
+  }
+
   // Write the frontmatter and description to the index.mdx file
   fs.writeFileSync(
     indexPath,

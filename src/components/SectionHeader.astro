@@ -9,7 +9,7 @@ interface Props {
 const { title, link, linkLabel, padding } = Astro.props;
 ---
 
-<div class={padding && `padding`}>
+<div class:list={{ padding: padding }}>
   <h2>{title}</h2>
   {
     link && (
@@ -37,9 +37,6 @@ const { title, link, linkLabel, padding } = Astro.props;
     margin: 0;
     font-size: 1.5rem;
   }
-  @media screen and (min-width: 768px) {
-  }
-
   a {
     color: rgb(var(--accent));
     text-decoration: none;

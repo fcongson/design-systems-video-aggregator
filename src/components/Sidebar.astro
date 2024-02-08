@@ -4,22 +4,22 @@ import { getCollection } from "astro:content";
 import { Icon } from "astro-icon";
 const allPosts = await getCollection("media");
 
-// Filter posts with non-empty tags
-const filteredPosts = allPosts.filter((post) => {
+// Filter posts with tags
+const postsWithTags = allPosts.filter((post) => {
   return !post.data.draft && post.data.tags && post.data.tags.length > 0;
 });
 
 const tags = [
   ...new Set(
-    filteredPosts
+    postsWithTags
       .map((post) => post.data.tags)
       .flat()
-      .sort()
+      .sort(),
   ),
 ];
 
-// Filter speakers with non-empty tags
-const filteredPostsSpeakers = allPosts.filter((post) => {
+// Filter posts with speakers
+const postsWithSpeakers = allPosts.filter((post) => {
   return (
     !post.data.draft && post.data.speakers && post.data.speakers.length > 0
   );
@@ -27,40 +27,35 @@ const filteredPostsSpeakers = allPosts.filter((post) => {
 
 const speakers = [
   ...new Set(
-    filteredPosts
+    postsWithSpeakers
       .map((post) => post.data.speakers)
       .flat()
-      .sort()
+      .sort(),
   ),
 ];
 
 function calculatePostCountForTag(tagName) {
   // Assuming 'posts' is an array of post objects with 'tags' property
-  return allPosts.filter((post) => post.data.tags.includes(tagName)).length;
+  return allPosts.filter((post) => post.data.tags?.includes(tagName)).length;
 }
 
 function calculatePostCountForSpeaker(speakerName) {
-  // Assuming 'posts' is an array of post objects with 'tags' property
-  return allPosts.filter((post) => post.data.speakers.includes(speakerName))
+  // Assuming 'posts' is an array of post objects with 'speakers' property
+  return allPosts.filter((post) => post.data.speakers?.includes(speakerName))
     .length;
 }
 ---
 
 <aside id="sidebar">
   <details>
-    <summary
-      ><Icon name="fluent:tag-20-filled" size="20" /> Tags <Icon
-        name="fluent:chevron-down-24-filled"
-        size="24"
-        class="toggle"
-      /></summary
-    >
+    <summary>
+      <Icon name="fluent:tag-20-filled" size="20" /> Tags
+      <Icon name="fluent:chevron-down-24-filled" size="24" class="toggle" />
+    </summary>
     <ul class="tags">
       {
         tags.map((tag) => {
-          // Calculate the count for each tag
-          const postCountForTag = calculatePostCountForTag(tag); // Replace with your actual logic
-
+          const postCountForTag = calculatePostCountForTag(tag);
           return (
             <li>
               <a href={`/tags/${tag}`} class="tag">
@@ -74,19 +69,14 @@ function calculatePostCountForSpeaker(speakerName) {
     </ul>
   </details>
   <details>
-    <summary
-      ><Icon name="fluent:person-20-filled" size="20" /> Speakers <Icon
-        name="fluent:chevron-down-24-filled"
-        size="24"
-        class="toggle"
-      />
+    <summary>
+      <Icon name="fluent:person-20-filled" size="20" /> Speakers
+      <Icon name="fluent:chevron-down-24-filled" size="24" class="toggle" />
     </summary>
     <ul class="tags">
       {
         speakers.map((speaker) => {
-          // Calculate the count for each tag
-          const postCountForSpeaker = calculatePostCountForSpeaker(speaker); // Replace with your actual logic
-
+          const postCountForSpeaker = calculatePostCountForSpeaker(speaker);
           return (
             <li>
               <a href={`/speakers/${speaker}`} class="tag">
@@ -105,76 +95,10 @@ function calculatePostCountForSpeaker(speakerName) {
   #sidebar {
     width: 100%;
     background: var(--sidebar-background);
-  }
-  @media screen and (max-width: 1024px) {
-    #sidebar {
-      padding: 0.5rem 0 0;
-      border-bottom: 1px solid var(--layout-border);
-    }
-    details {
-    }
-  }
-
-  @media screen and (max-width: 1024px) {
-    #sidebar {
-      display: none;
-    }
-  }
-  @media screen and (min-width: 1024px) {
-    #sidebar {
-      padding: 0.5rem 0 1rem;
-      overflow: auto;
-      height: calc(100dvh - var(--header-height));
-      border-right: 1px solid var(--layout-border);
-    }
-  }
-
-  .tags {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    padding: 0 1em;
-    margin-block: 0 2rem;
-  }
-
-  .tags li {
-    line-height: 1.2rem;
-    margin-block-end: 0.45rem;
-  }
-  .tags:last-child {
-    margin-block-end: 0rem;
-  }
-
-  .tag {
-    font-size: 1rem;
-    color: rgb(var(--accent));
-    display: flex;
-    text-decoration: none;
-    justify-content: space-between;
-    align-items: center;
-    line-height: 1.1em;
-  }
-  .tag:hover {
-    color: var(--accent-hover);
-  }
-
-  .tag [data-type="label"] {
-    border-bottom: 1px solid var(--accent-hover);
-    padding: 0.1em 0 0;
-  }
-
-  .tag [data-type="count"] {
-    display: inline-flex;
-    color: var(--tx-2);
-    background: var(--bg-2);
-    padding: 0.25em 0.5em 0.1em;
-    border-radius: 0.6em;
-    align-items: baseline;
-    line-height: 1em;
-    min-width: 1.5em;
-    font-size: 0.8em;
-    font-weight: 700;
-    justify-content: center;
+    padding: 0.5rem 0 1rem;
+    overflow: auto;
+    height: calc(100dvh - var(--header-height));
+    border-right: 1px solid var(--layout-border);
   }
   details {
     border-radius: 4px;
@@ -182,7 +106,14 @@ function calculatePostCountForSpeaker(speakerName) {
     margin-block-end: 0.5rem;
     user-select: none;
   }
-
+  details[open] summary {
+    border-bottom: 1px solid var(--layout-border);
+    margin-bottom: 0.5em;
+  }
+  [astro-icon] {
+    position: relative;
+    top: 0.25rem;
+  }
   summary {
     font-weight: bold;
     font-size: 1rem;
@@ -203,19 +134,52 @@ function calculatePostCountForSpeaker(speakerName) {
   details[open] summary svg.toggle {
     transform: rotate(180deg);
   }
-  @media screen and (min-width: 768px) {
-    details {
-      margin-block-end: 1rem;
+  .tags {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0 1em;
+    margin-block: 0 2rem;
+  }
+  .tags li {
+    line-height: 1.2rem;
+    margin-block-end: 0.45rem;
+  }
+  .tags:last-child {
+    margin-block-end: 0rem;
+  }
+  .tag {
+    font-size: 1rem;
+    color: rgb(var(--accent));
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1.1em;
+  }
+  .tag:hover {
+    color: var(--accent-hover);
+  }
+  .tag [data-type="label"] {
+    border-bottom: 1px solid var(--accent-hover);
+    padding: 0.1em 0 0;
+  }
+  .tag [data-type="count"] {
+    display: inline-flex;
+    color: var(--tx-2);
+    background: var(--bg-2);
+    padding: 0.25em 0.5em 0.1em;
+    border-radius: 0.6em;
+    align-items: baseline;
+    line-height: 1em;
+    min-width: 1.5em;
+    font-size: 0.8em;
+    font-weight: 700;
+    justify-content: center;
+  }
+  @media screen and (max-width: 1024px) {
+    #sidebar {
+      display: none;
     }
-  }
-
-  details[open] summary {
-    border-bottom: 1px solid var(--layout-border);
-    margin-bottom: 0.5em;
-  }
-
-  [astro-icon] {
-    position: relative;
-    top: 0.25rem;
   }
 </style>

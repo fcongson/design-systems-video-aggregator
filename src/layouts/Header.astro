@@ -1,0 +1,275 @@
+---
+import AstroSearch from "astro-pagefind/components/Search";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { SITE_TITLE } from "../consts";
+
+const { pathname } = Astro.url;
+const currentPage = pathname.replace(/\/$/, "");
+---
+
+<header>
+  <nav>
+    <h2>
+      <a href="/" title={SITE_TITLE}>
+        <svg
+          class="logo"
+          width="32"
+          height="32"
+          viewBox="0 0 512 512"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M469.333 64H42.6667C31.3542 64.0113 20.5084 68.5102 12.5093 76.5093C4.51015 84.5084 0.0112955 95.3542 0 106.667V405.333C0.0112955 416.646 4.51015 427.492 12.5093 435.491C20.5084 443.49 31.3542 447.989 42.6667 448H469.333C480.646 447.989 491.492 443.49 499.491 435.491C507.49 427.492 511.989 416.646 512 405.333V106.667C511.989 95.3542 507.49 84.5084 499.491 76.5093C491.492 68.5102 480.646 64.0113 469.333 64Z"
+            fill="white"></path>
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M469.333 64H42.6667C31.3542 64.0113 20.5084 68.5102 12.5093 76.5093C4.51015 84.5084 0.0112955 95.3542 0 106.667V405.333C0.0112955 416.646 4.51015 427.492 12.5093 435.491C20.5084 443.49 31.3542 447.989 42.6667 448H469.333C480.646 447.989 491.492 443.49 499.491 435.491C507.49 427.492 511.989 416.646 512 405.333V106.667C511.989 95.3542 507.49 84.5084 499.491 76.5093C491.492 68.5102 480.646 64.0113 469.333 64ZM374.785 221.009C374.298 214.92 372.014 210.171 367.935 206.762C363.916 203.352 357.797 201.647 349.577 201.647C344.341 201.647 340.048 202.286 336.7 203.565C333.412 204.783 330.976 206.457 329.393 208.588C327.81 210.719 326.988 213.155 326.927 215.895C326.805 218.148 327.201 220.187 328.115 222.014C329.089 223.78 330.611 225.393 332.681 226.854C334.751 228.255 337.4 229.533 340.627 230.69C343.854 231.847 347.69 232.882 352.135 233.796L367.478 237.084C377.829 239.275 386.688 242.168 394.056 245.76C401.423 249.352 407.451 253.584 412.139 258.455C416.828 263.265 420.268 268.684 422.46 274.712C424.712 280.74 425.869 287.316 425.93 294.439C425.869 306.739 422.794 317.15 416.706 325.675C410.617 334.199 401.91 340.684 390.585 345.128C379.321 349.573 365.773 351.795 349.943 351.795C333.686 351.795 319.499 349.39 307.382 344.58C295.327 339.77 285.95 332.372 279.252 322.387C272.616 312.34 269.267 299.493 269.206 283.845H317.429C317.733 289.568 319.164 294.379 321.721 298.275C324.279 302.172 327.871 305.125 332.498 307.135C337.187 309.144 342.758 310.148 349.212 310.148C354.631 310.148 359.167 309.479 362.82 308.139C366.474 306.8 369.244 304.943 371.131 302.568C373.019 300.193 373.993 297.484 374.054 294.439C373.993 291.578 373.049 289.081 371.223 286.95C369.457 284.758 366.534 282.81 362.455 281.105C358.376 279.339 352.865 277.695 345.924 276.173L327.293 272.155C310.731 268.562 297.671 262.565 288.111 254.162C278.613 245.699 273.894 234.161 273.955 219.548C273.894 207.675 277.06 197.294 283.454 188.404C289.908 179.454 298.828 172.482 310.214 167.489C321.66 162.496 334.782 160 349.577 160C364.677 160 377.738 162.527 388.758 167.58C399.779 172.634 408.273 179.758 414.24 188.952C420.268 198.085 423.312 208.771 423.373 221.009H374.785ZM157.302 349.603H85.3333V162.557H156.572C175.812 162.557 192.434 166.302 206.438 173.791C220.503 181.219 231.341 191.935 238.952 205.94C246.624 219.883 250.46 236.596 250.46 256.08C250.46 275.564 246.655 292.308 239.044 306.312C231.433 320.256 220.656 330.972 206.712 338.461C192.769 345.889 176.299 349.603 157.302 349.603ZM137.669 210.137C135.002 208.595 131.667 210.519 131.667 213.6V298.401C131.667 301.481 135.002 303.405 137.669 301.863L211.01 259.463C213.674 257.923 213.674 254.077 211.01 252.537L137.669 210.137Z"
+            fill="rgb(var(--accent))"></path>
+        </svg>
+        <span class="logoTitle">Design Systems</span>
+      </a>
+    </h2>
+    <button class="nav-menu-button">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </button>
+    <div class="nav-menu">
+      <div class="nav-search-wrapper">
+        <AstroSearch
+          id="nav-search"
+          uiOptions={{
+            showSubResults: true,
+            showEmptyFilters: false,
+          }}
+        />
+      </div>
+      <a href="/about" class:list={{ active: currentPage === "/about" }}>
+        About
+      </a>
+      <a
+        href="https://twitter.com/designsysmedia"
+        target="_blank"
+        title="@designsysmedia"
+      >
+        <svg
+          viewBox="0 0 16 16"
+          aria-describedby="description"
+          width="24"
+          height="24"
+          astro-icon="social/twitter"
+        >
+          <desc id="description">Follow DesignSystems.media on Twitter</desc>
+          <path
+            fill="currentColor"
+            d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+          ></path>
+        </svg>
+      </a>
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
+
+<script>
+  document.querySelector(".nav-menu-button")?.addEventListener("click", () => {
+    document
+      .querySelector(".nav-menu-button")
+      ?.classList.toggle("nav-menu-button-active");
+    document.querySelector(".nav-menu")?.classList.toggle("nav-menu-active");
+  });
+</script>
+
+<style is:global>
+  header {
+    margin: 0;
+    padding: 0 1em;
+    box-shadow: 0 2px 8px rgba(var(--shadow), 8%);
+    border-bottom: 1px solid var(--hr);
+    background: var(--header-background);
+    z-index: 100;
+    position: relative;
+  }
+  nav {
+    --nav-menu-button-display: none;
+    --nav-menu-display: flex;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+  .nav-menu a {
+    display: inline-block;
+    text-decoration: none;
+  }
+  .nav-menu a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+  .nav-menu a:hover,
+  .nav-menu button:hover {
+    color: var(--accent-hover);
+    fill: currentColor;
+  }
+  nav h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    font-weight: 400;
+  }
+
+  nav h2 a svg {
+    margin-right: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+
+  nav h2 a,
+  nav h2 a.active {
+    color: var(--header-text);
+    text-decoration: none;
+    padding: 0;
+  }
+  nav a {
+    padding: 1em 0.5em;
+    color: var(--header-text);
+    text-decoration: none;
+  }
+  nav a.active {
+    text-decoration: none;
+  }
+  nav h2 a {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+  }
+  .nav-menu-button {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: var(--nav-menu-button-display);
+    height: 3.25rem;
+    position: relative;
+    width: 3.25rem;
+    margin: 0.75rem 0;
+  }
+  .nav-menu-button .line {
+    --nav-menu-button-span-width: 24px;
+    --nav-menu-button-span-gap: 8px;
+    border-radius: 1px;
+    background-color: var(--header-text);
+    height: 2px;
+    left: calc((3.25rem - var(--nav-menu-button-span-width)) / 2);
+    position: absolute;
+    transform-origin: center;
+    transition-duration: 200ms;
+    transition-property: background-color, opacity, transform;
+    transition-timing-function: ease-in-out;
+    width: var(--nav-menu-button-span-width);
+  }
+  .nav-menu-button span:first-child {
+    top: calc(50% - var(--nav-menu-button-span-gap));
+  }
+  .nav-menu-button span:nth-child(2) {
+    top: 50%;
+  }
+  .nav-menu-button span:nth-child(3) {
+    top: calc(50% + var(--nav-menu-button-span-gap));
+  }
+  .nav-menu-button.nav-menu-button-active span:first-child {
+    transform: translateY(var(--nav-menu-button-span-gap)) rotate(45deg);
+  }
+  .nav-menu-button.nav-menu-button-active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-menu-button.nav-menu-button-active span:nth-child(3) {
+    transform: translateY(calc(-1 * var(--nav-menu-button-span-gap)))
+      rotate(-45deg);
+  }
+  .nav-menu {
+    display: var(--nav-menu-display);
+    flex-grow: 1;
+    align-items: center;
+  }
+  .nav-menu a {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+  }
+  .nav-menu.nav-menu-active {
+    display: flex;
+  }
+  .nav-search-wrapper {
+    flex-grow: 1;
+    padding: 0 2rem;
+    --pagefind-ui-scale: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .nav-search-wrapper .pagefind-ui__search-input,
+  .nav-search-wrapper .pagefind-ui__drawer {
+    background-color: var(--header-background);
+  }
+  .nav-search-wrapper .pagefind-ui__drawer {
+    box-shadow: 0 2px 8px rgba(var(--shadow), 8%);
+    padding: calc(1rem * var(--pagefind-ui-scale));
+    border: var(--pagefind-ui-border-width) solid var(--pagefind-ui-border);
+    border-radius: var(--pagefind-ui-border-radius);
+    font-size: calc(21px * var(--pagefind-ui-scale));
+    max-height: calc(100vh - var(--header-height) - 4rem);
+    overflow: scroll;
+    position: absolute;
+    width: 100%;
+    top: 4rem;
+  }
+  .nav-search-wrapper .pagefind-ui__filter-panel {
+    display: none !important;
+  }
+  .nav-search-wrapper .pagefind-ui__results-area {
+    margin-top: 0;
+  }
+  @media screen and (max-width: 425px) {
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+    .logoTitle {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .nav-menu-button {
+      --nav-menu-button-display: block;
+    }
+    .nav-menu {
+      --nav-menu-display: none;
+      background-color: var(--header-background);
+      flex-direction: column;
+      flex-basis: 100%;
+      align-items: flex-end;
+    }
+    .nav-search-wrapper {
+      padding: 0 0.5rem 2rem;
+      flex-grow: 0;
+      max-width: unset;
+      width: 100%;
+    }
+    .nav-search-wrapper .pagefind-ui__drawer {
+      box-shadow: unset;
+      padding: unset;
+      border: unset;
+      border-radius: unset;
+      max-height: unset;
+      overflow: unset;
+      position: relative;
+      top: 0;
+    }
+    .nav-menu #themeToggle {
+      margin-bottom: 4rem;
+    }
+  }
+</style>

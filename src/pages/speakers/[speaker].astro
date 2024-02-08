@@ -1,10 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import VideoCard from "../../components/VideoCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import MediaGrid from "../../layouts/MediaGrid.astro";
 
 import { Icon } from "astro-icon";
+import MediaGrid from "../../components/MediaGrid.astro";
 export async function getStaticPaths() {
   const allPosts = await getCollection("media");
   const uniqueSpeakers = [
@@ -12,7 +11,10 @@ export async function getStaticPaths() {
   ];
 
   return uniqueSpeakers.map((speaker) => {
-    if (!speaker) return;
+    if (!speaker)
+      return {
+        params: { speaker },
+      };
     const filteredPosts = allPosts.filter((post) => {
       return !post.data.draft && post.data.speakers?.includes(speaker);
     });
@@ -29,57 +31,18 @@ const { speaker } = Astro.params;
 const { posts } = Astro.props;
 ---
 
-<BaseLayout sidebar={true} baseHeadProps={{ title: speaker }}>
-  <a href="/speakers" class="breadcrumb"
-    ><Icon name="fluent:tag-20-filled" size="20" />Speakers</a
-  >
+<BaseLayout sidebar={true} metadataProps={{ title: speaker }}>
+  <a href="/speakers" class="breadcrumb">
+    <Icon name="fluent:tag-20-filled" size="20" />Speakers
+  </a>
   <h2>{speaker}</h2>
-  <MediaGrid>
-    {
-      posts.map((post) => (
-        <VideoCard
-          title={post.data.title}
-          poster={post.data.poster}
-          duration={post.data.duration}
-          slug={post.slug}
-          publishedAt={post.data.publishedAt}
-        />
-      ))
-    }
-  </MediaGrid>
+  <MediaGrid media={posts} />
 </BaseLayout>
 
 <style>
-  .speakers {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .speaker {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
-  }
-
-  main {
-    width: 100%;
-    max-width: 1600px;
-    margin: auto;
-    padding: 1rem;
-  }
-  @media screen and (min-width: 768px) {
-    main {
-      padding: 2rem;
-    }
-  }
-
   h2 {
     margin-block: 0 2rem;
   }
-
   .breadcrumb {
     text-decoration: none;
   }

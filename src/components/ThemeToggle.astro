@@ -19,7 +19,7 @@
 
 <style>
   .sun {
-    fill: var(--meta-data);
+    fill: currentColor;
   }
   .moon {
     fill: transparent;
@@ -29,24 +29,26 @@
     fill: transparent;
   }
   :global([data-theme="dark"]) .moon {
-    fill: var(--meta-data);
+    fill: currentColor;
   }
   button {
     border: none;
     background: transparent;
     cursor: pointer;
+    color: var(----meta-data);
   }
 </style>
 
 <script is:inline>
+  const defaultTheme = "dark";
   const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+    if (localStorage?.getItem("theme")) {
       return localStorage.getItem("theme");
     }
     if (window.matchMedia("(prefers-color-scheme: light)").matches) {
       return "light";
     }
-    return "dark";
+    return defaultTheme;
   })();
 
   if (theme === "light") {
@@ -69,16 +71,7 @@
     localStorage.setItem("theme", targetTheme);
   };
 
-  const setTheme = () => {
-    currentTheme = "dark";
-    if (localStorage.getItem("theme")) {
-      var currentTheme = localStorage.getItem("theme");
-    }
-
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  };
-
   document
     .getElementById("themeToggle")
-    .addEventListener("click", handleToggleClick);
+    ?.addEventListener("click", handleToggleClick);
 </script>

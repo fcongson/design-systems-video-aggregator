@@ -1,81 +1,37 @@
 ---
-import Footer from "../components/Footer.astro";
+import Title from "../components/Title.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const title = "About";
 ---
 
-<BaseLayout sidebar={false} baseHeadProps={{ title: "About" }}>
-  <div class="title">
-    <h1>Design system media library</h1>
-  </div>
-  <div class="single-page">
-    <div class="prose">
-      <p>
-        We want to make it easier to access the huge range of design systems
-        videos available online.
-      </p><p>
-        All content has been tagged with <a href="/speakers">speakers</a> and <a
-          href="/tags">topics</a
-        > to help you find what you want to watch.
-      </p>
-      <p>
-        Built by <a href="https://twitter.com/JoshDesignNz">Josh Harwood</a> and
-
-
-        <a href="https://twitter.com/fcongson">Frank Congson</a>.
-      </p>
-      <p>
-        Other projects you might be interested in: <a
-          href="https://designsystems.directory">Design Systems Directory</a
-        >, <a href="https://ds.events">Design Systems Events</a>, <a
-          href="https://toolkit.design">Design and dev bookmarks</a
-        >
-      </p>
-    </div>
-  </div>
-  <Footer />
+<BaseLayout sidebar={false} metadataProps={{ title: "About" }}>
+  <Title>Design system media library</Title>
+  <p>
+    We want to make it easier to access the huge range of design systems videos
+    available online.
+  </p>
+  <p>
+    All content has been tagged with <a href="/speakers">speakers</a> and <a
+      href="/tags">topics</a
+    > to help you find what you want to watch.
+  </p>
+  <p>
+    Built by <a href="https://twitter.com/JoshDesignNz">Josh Harwood</a> and
+    <a href="https://twitter.com/fcongson">Frank Congson</a>.
+  </p>
+  <p>
+    Other projects you might be interested in: <a
+      href="https://designsystems.directory">Design Systems Directory</a
+    >, <a href="https://ds.events">Design Systems Events</a>, <a
+      href="https://toolkit.design">Design and dev bookmarks</a
+    >
+  </p>
 </BaseLayout>
 
-<style is:global>
-  .hero-image {
-    width: 100%;
-  }
-  .hero-image img {
-    display: block;
+<style>
+  p {
+    max-width: 720px;
     margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: var(--box-shadow);
-  }
-  .prose {
-    width: 720px;
-    max-width: 100%;
-    margin: auto;
     padding: 1em;
     color: rgb(var(--gray-dark));
-  }
-  .title {
-    margin: 3rem auto 0;
-    padding: 1rem;
-    line-height: 1;
-  }
-  .title h1 {
-    margin: 0;
-    text-align: center;
-  }
-  .date {
-    margin-bottom: 0.5em;
-    color: rgb(var(--gray));
-  }
-  .last-updated-on {
-    font-style: italic;
-  }
-  section#main-page {
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - var(--header-height));
-  }
-  .single-page {
-    flex-grow: 1;
   }
 </style>

@@ -1,27 +1,28 @@
 ---
-import type { Props as BaseHeadProps } from "../components/BaseHead.astro";
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
 import Sidebar from "../components/Sidebar.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import Footer from "../layouts/Footer.astro";
+import Header from "./Header.astro";
+import type { Props as MetadataProps } from "./Metadata.astro";
+import Metadata from "./Metadata.astro";
 
 interface Props {
   sidebar?: boolean;
   fullWidth?: boolean;
-  baseHeadProps?: BaseHeadProps;
+  metadataProps?: MetadataProps;
 }
 
-const { sidebar, fullWidth, baseHeadProps } = Astro.props;
+const { sidebar, fullWidth, metadataProps } = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <BaseHead
+    <Metadata
       title={`${SITE_TITLE}${
-        !!baseHeadProps?.title ? ` | ${baseHeadProps.title}` : ""
+        !!metadataProps?.title ? ` | ${metadataProps.title}` : ""
       }`}
-      description={baseHeadProps?.description ?? SITE_DESCRIPTION}
-      image={baseHeadProps?.image}
+      description={metadataProps?.description ?? SITE_DESCRIPTION}
+      image={metadataProps?.image}
     />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,58 +30,74 @@ const { sidebar, fullWidth, baseHeadProps } = Astro.props;
 
   <body>
     <Header title={SITE_TITLE} />
-    <main class=`${fullWidth && "full-width"}`>
-      <section id="site-wrapper" class=`${sidebar && "with-sidebar"}`>
+    <main class:list={{ "full-width": fullWidth }}>
+      <section class:list={["site-wrapper", { "with-sidebar": sidebar }]}>
         {sidebar && <Sidebar />}
-        <section id="main-page">
-          <slot />
+        <section class="main-page">
+          <div class="content">
+            <slot />
+          </div>
+          <Footer />
         </section>
       </section>
     </main>
-    <style>
-      main {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-      }
-      @media screen and (min-width: 1025px) {
-        .with-sidebar {
-          display: grid;
-          grid-template-columns: 20ch 1fr;
-        }
-      }
-      .with-sidebar section#main-page {
-        width: 100%;
-        padding: 0rem;
-      }
-      @media screen and (min-width: 1024px) {
-        .with-sidebar section#main-page {
-          overflow: auto;
-          height: calc(100dvh - 78px);
-          padding: 1.5rem 1.5rem 2rem 1.5rem;
-        }
-      }
-      main {
-        width: 100%;
-        margin: auto;
-        padding: 0rem;
-        z-index: 50;
-        position: relative;
-      }
-      main.full-width {
-        max-width: 100%;
-      }
-      @media screen and (min-width: 1024px) {
-        main {
-          padding: 0rem 0rem;
-        }
-      }
-    </style>
     <style is:global>
       /* Improve Page speed */
       /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
       img {
         content-visibility: auto;
+      }
+    </style>
+    <style>
+      main {
+        width: 100%;
+        max-width: 100%;
+        margin: auto;
+        padding: 0;
+        z-index: 50;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      main.full-width {
+        max-width: 100%;
+      }
+      .site-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .site-wrapper.with-sidebar {
+        display: grid;
+      }
+      .main-page {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .with-sidebar {
+        display: grid;
+        grid-template-columns: 20ch 1fr;
+      }
+      .with-sidebar .main-page {
+        width: 100%;
+        max-height: calc(100dvh - var(--header-height));
+        overflow: auto;
+      }
+      .content {
+        padding: 1.5rem 1.5rem 2rem 1.5rem;
+        flex: 1;
+      }
+      @media screen and (max-width: 1024px) {
+        .with-sidebar {
+          grid-template-columns: 1fr;
+        }
+        .with-sidebar .main-page {
+          padding: 0;
+        }
+        .content {
+          padding: 0;
+        }
       }
     </style>
   </body>

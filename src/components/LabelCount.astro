@@ -1,0 +1,48 @@
+---
+interface Props {
+  type: String;
+  name: String;
+  count: Number;
+}
+
+const { type, name, count } = Astro.props;
+---
+
+<div class="media-item">
+  <a href={`/${type}/${name}`} class="link">
+    <span data-type="label">{name}</span>{" "}
+    <span data-type="count">{count}</span>
+  </a>
+</div>
+
+<style>
+  .link {
+    font-size: 1rem;
+    color: rgb(var(--accent));
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1.1em;
+  }
+  .link:hover {
+    color: var(--accent-hover);
+  }
+  .link [data-type="label"] {
+    border-bottom: 1px solid var(--accent-hover);
+    padding: 0.1em 0 0;
+  }
+  .link [data-type="count"] {
+    display: inline-flex;
+    color: var(--tx-2);
+    background: var(--bg-2);
+    padding: 0.25em 0.5em 0.1em;
+    border-radius: 0.6em;
+    align-items: baseline;
+    line-height: 1em;
+    min-width: 1.5em;
+    font-size: 0.8em;
+    font-weight: 700;
+    justify-content: center;
+  }
+</style>

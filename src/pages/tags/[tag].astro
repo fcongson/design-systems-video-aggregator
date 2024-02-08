@@ -1,10 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-import VideoCard from "../../components/VideoCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 import { Icon } from "astro-icon";
-import MediaGrid from "../../layouts/MediaGrid.astro";
+import MediaGrid from "../../components/MediaGrid.astro";
 export async function getStaticPaths() {
   const allPosts = await getCollection("media");
   const uniqueTags = [
@@ -12,7 +11,10 @@ export async function getStaticPaths() {
   ];
 
   return uniqueTags.map((tag) => {
-    if (!tag) return;
+    if (!tag)
+      return {
+        params: { tag },
+      };
     const filteredPosts = allPosts.filter((post) => {
       return !post.data.draft && post.data.tags?.includes(tag);
     });
@@ -29,21 +31,15 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
 
+<BaseLayout sidebar={true} metadataProps={{ title: tag }}>
+  <a href="/tags" class="breadcrumb">
+    <Icon name="fluent:tag-20-filled" size="20" />Tags
+  </a>
+  <h2>{tag}</h2>
+  <MediaGrid media={posts} />
+</BaseLayout>
+
 <style>
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
-  }
-
   h2 {
     margin-block: 0 2rem;
   }
@@ -59,7 +55,6 @@ const { posts } = Astro.props;
     margin-right: 0.25em;
     color: var(--tagCount-icon);
   }
-
   @media (max-width: 1024px) {
     h2,
     .breadcrumb {
@@ -68,24 +63,3 @@ const { posts } = Astro.props;
     }
   }
 </style>
-
-<BaseLayout sidebar={true} baseHeadProps={{ title: tag }}>
-  <a href="/tags" class="breadcrumb"
-    ><Icon name="fluent:tag-20-filled" size="20" />Tags</a
-  >
-  <h2>{tag}</h2>
-
-  <MediaGrid>
-    {
-      posts.map((post) => (
-        <VideoCard
-          title={post.data.title}
-          poster={post.data.poster}
-          duration={post.data.duration}
-          slug={post.slug}
-          publishedAt={post.data.publishedAt}
-        />
-      ))
-    }
-  </MediaGrid>
-</BaseLayout>

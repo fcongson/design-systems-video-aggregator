@@ -1,0 +1,244 @@
+---
+import { YouTube } from "@astro-community/astro-embed-youtube";
+import { Icon } from "astro-icon";
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import Title from "../components/Title.astro";
+import { formatDuration } from "../utils/formatDuration";
+type Media = CollectionEntry<"media">;
+type Props = Media["data"] & { slug?: Media["slug"] };
+
+const {
+  title,
+  description,
+  publishedAt,
+  image,
+  duration,
+  videoUrl,
+  poster,
+  slug,
+  tags,
+  speakers,
+  categories,
+} = Astro.props;
+---
+
+<article data-pagefind-body data-pagefind-sort>
+  <div class="hero-image" data-pagefind-meta={`image:${image?.src}`}>
+    <YouTube id={videoUrl ?? ""} class="video-embed" poster={poster?.src} />
+    <div class="background" style={`background-image: url('${image?.src}')`}>
+    </div>
+  </div>
+  <Title data-pagefind-meta="title">{title}</Title>
+  <div class="content">
+    <div class="meta-data">
+      <span class="inline">
+        <Icon name="fluent:calendar-date-20-filled" size="20" />
+        <FormattedDate date={publishedAt} data-pagefind-sort="date" />
+      </span>
+      <span class="inline">
+        <Icon name="fluent:clock-20-filled" size="20" />
+        <span data-pagefind-sort="duration">
+          {formatDuration(duration)}
+        </span>
+      </span>
+      <span class="inline">
+        <Icon name="fluent:window-new-20-filled" size="20" />
+        <a href={videoUrl} title={title}>Link to video</a>
+      </span>
+      <div class="break"></div>
+      <div class="tags">
+        <span><Icon name="fluent:tag-20-filled" size="20" />Tags</span>
+        {
+          tags?.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="tag"
+              data-pagefind-filter="tag"
+              data-pagefind-weight="5"
+            >
+              {tag}
+            </a>
+          ))
+        }
+      </div>
+      <div class="speakers">
+        <span><Icon name="fluent:person-20-filled" size="20" />Speakers</span>
+        {
+          speakers?.map((speaker) => (
+            <a
+              href={`/speakers/${speaker}`}
+              class="speaker"
+              data-pagefind-filter="speaker"
+              data-pagefind-weight="5"
+            >
+              {speaker}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <div class="prose" data-pagefind-weight="3">
+      <slot />
+    </div>
+  </div>
+</article>
+
+<style>
+  .hero-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: 506px;
+  }
+  .hero-image .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background-size: cover;
+    background-position: center center;
+    opacity: 1;
+    overflow: hidden;
+    animation: fadeIn 1.5s;
+  }
+  .hero-image .background::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(1rem);
+  }
+  .hero-image .video-embed {
+    border-radius: 0px;
+    margin: 0 auto;
+    z-index: 100;
+    aspect-ratio: auto 16/9;
+    width: 100%;
+    max-width: 900px;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  :global(.title) {
+    margin: 0 auto 1em;
+    padding: 2.5rem 0rem 0.5rem;
+    width: 100%;
+    max-width: 900px;
+  }
+  .prose {
+    margin: auto;
+    color: var(--body-text);
+    overflow-wrap: anywhere;
+  }
+  :global(.prose h1),
+  :global(.prose h2),
+  :global(.prose h3),
+  :global(.prose h4),
+  :global(.prose h5),
+  :global(.prose h6) {
+    font-size: 1em;
+  }
+  .meta-data {
+    color: var(--meta-data);
+    padding: 1rem 0em;
+    padding-left: 1.8rem;
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1rem 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--hr);
+    justify-content: baseline;
+  }
+  .meta-data a {
+    color: var(--meta-data-link);
+  }
+
+  .meta-data a:hover {
+    color: var(--accent-hover);
+  }
+  .meta-data span {
+    color: var(--meta-data);
+  }
+  .tags,
+  .speakers {
+    line-height: normal;
+    align-items: baseline;
+    margin-block-start: 0;
+    display: flex;
+    flex-wrap: none;
+    flex-direction: column;
+    gap: 0.5em 0em;
+  }
+  .break {
+    display: none;
+  }
+  .meta-data [astro-icon] {
+    margin-right: 0.25em;
+    position: absolute;
+    transform: translateX(-1.8rem);
+  }
+  .meta-data span.inline [astro-icon] {
+    margin-top: 0.2em;
+  }
+  .content {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 1rem;
+    display: grid;
+    gap: 2rem;
+    justify-content: center;
+    align-items: start;
+    grid-template-columns: minmax(100px, 200px) 1fr;
+  }
+  @media screen and (max-width: 1024px) {
+    .hero-image {
+      max-height: 405px;
+      height: auto;
+    }
+    .hero-image .video-embed {
+      width: 100%;
+      max-width: 720px;
+    }
+    :global(.title) {
+      padding: 2.5rem 1rem 0.5rem;
+    }
+    .meta-data {
+      padding-left: 0;
+      flex-direction: row;
+      gap: 0em 2rem;
+    }
+    .meta-data [astro-icon] {
+      position: relative;
+      transform: translateX(0);
+    }
+    .tags,
+    .speakers {
+      display: inline-flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      line-height: normal;
+      gap: 0.25em 1em;
+      align-items: baseline;
+      margin-block-start: 0.5em;
+    }
+    .break {
+      flex-basis: 100%;
+      height: 0;
+      display: block;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+</style>

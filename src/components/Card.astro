@@ -1,17 +1,12 @@
 ---
-interface Props {
-  icon?: string;
-  style?: string;
-}
 
-const { icon, style = "card" } = Astro.props;
 ---
 
-<div class={style}>
+<div class="card">
   <slot />
 </div>
 
-<style is:global>
+<style>
   .card {
     background: var(--tagCount-background);
     padding: 1em;

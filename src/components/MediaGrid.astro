@@ -1,0 +1,20 @@
+---
+import ResponsiveGrid from "../layouts/ResponsiveGrid.astro";
+import VideoCard from "./VideoCard.astro";
+
+const { media } = Astro.props;
+---
+
+<ResponsiveGrid>
+  {
+    media.map((media) => (
+      <VideoCard
+        title={media.data.title}
+        poster={media.data.poster}
+        duration={media.data.duration}
+        slug={media.slug}
+        publishedAt={media.data.publishedAt}
+      />
+    ))
+  }
+</ResponsiveGrid>

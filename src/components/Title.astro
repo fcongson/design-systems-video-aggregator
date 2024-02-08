@@ -1,0 +1,14 @@
+---
+const { title } = Astro.props;
+---
+
+<h1 class="title"><slot /></h1>
+
+<style>
+  .title {
+    margin: 3rem auto 0;
+    padding: 1rem;
+    line-height: 1;
+    text-align: center;
+  }
+</style>

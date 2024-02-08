@@ -1,18 +1,14 @@
 ---
 import { getCollection } from "astro:content";
-import TagCard from "../../components/TagCard.astro";
+import LabelCount from "../../components/LabelCount.astro";
+import Title from "../../components/Title.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import MediaGrid from "../../layouts/MediaGrid.astro";
+import ResponsiveGrid from "../../layouts/ResponsiveGrid.astro";
 
 const allPosts = await getCollection("media");
 
-// Filter posts with non-empty tags
+// Filter posts with tags
 const filteredPosts = allPosts.filter((post) => {
-  return !post.data.draft && post.data.tags && post.data.tags.length > 0;
-});
-
-// Filter tags with non-empty tags
-const filteredPostsSpeakers = allPosts.filter((post) => {
   return !post.data.draft && post.data.tags && post.data.tags.length > 0;
 });
 
@@ -21,7 +17,7 @@ const tags = [
     filteredPosts
       .map((post) => post.data.tags)
       .flat()
-      .sort()
+      .sort(),
   ),
 ];
 
@@ -43,39 +39,33 @@ tags.forEach((tag) => {
 });
 ---
 
-<BaseLayout sidebar={false} baseHeadProps={{ title }}>
-  <div class="title">
-    <h1>{title}</h1>
+<BaseLayout sidebar={false} metadataProps={{ title }}>
+  <Title>{title}</Title>
+  <div class="alphabet">
+    {
+      Object.keys(groupedTags).map((letter) => (
+        <a href={`#${letter}`}>{letter}</a>
+      ))
+    }
   </div>
-  <div class="single-page">
-    <div class="alphabet">
-      {
-        Object.keys(groupedTags).map((letter) => (
-          <a href={`#${letter}`}>{letter}</a>
-        ))
-      }
-    </div>
-    <MediaGrid>
-      {
-        Object.keys(groupedTags).map((letter) => (
-          <div key={letter}>
-            <a name={letter}>
-              <h2>{letter}</h2>
-            </a>
-            <div class="grid">
-              {groupedTags[letter].map((tag) => (
-                <TagCard
-                  type="tags"
-                  name={tag}
-                  count={calculatePostCountForSpeaker(tag)}
-                />
-              ))}
-            </div>
+  <ResponsiveGrid>
+    {
+      Object.keys(groupedTags).map((letter) => (
+        <div>
+          <h2 id={letter}>{letter}</h2>
+          <div class="grid">
+            {groupedTags[letter].map((tag) => (
+              <LabelCount
+                type="tags"
+                name={tag}
+                count={calculatePostCountForSpeaker(tag)}
+              />
+            ))}
           </div>
-        ))
-      }
-    </MediaGrid>
-  </div>
+        </div>
+      ))
+    }
+  </ResponsiveGrid>
 </BaseLayout>
 
 <style>
@@ -102,14 +92,5 @@ tags.forEach((tag) => {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-  }
-  .title {
-    margin: 3rem auto 0;
-    padding: 1rem;
-    line-height: 1;
-  }
-  .title h1 {
-    margin: 0;
-    text-align: center;
   }
 </style>

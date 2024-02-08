@@ -5,7 +5,7 @@
  */
 
 :root {
-  --header-height: 4rem;
+  --header-height: 68px;
   --neutral-black: #100f0f;
   --neutral-950: #1c1b1a;
   --neutral-900: #282726;
@@ -166,13 +166,13 @@ h6 {
   text-align: left;
 }
 h1 {
-  font-size: 1.5em;
+  font-size: 2.2em;
 }
 h2 {
-  font-size: 1.3em;
+  font-size: 1.8em;
 }
 h3 {
-  font-size: 1.2em;
+  font-size: 1.953em;
 }
 h4 {
   font-size: 1.563em;
@@ -182,16 +182,15 @@ h5 {
   font-size: 1.25em;
   font-weight: 400;
 }
-
-@media (min-width: 1024px) {
+@media (max-width: 1024px) {
   h1 {
-    font-size: 2.2em;
+    font-size: 1.5em;
   }
   h2 {
-    font-size: 1.8em;
+    font-size: 1.3em;
   }
   h3 {
-    font-size: 1.953em;
+    font-size: 1.2em;
   }
   h4 {
     font-size: 1.563em;
@@ -211,7 +210,7 @@ a {
   color: rgb(var(--accent));
 }
 a:hover {
-  color: rgb(var(--accent));
+  color: var(--accent-hover);
 }
 p {
   margin-bottom: 1em;
@@ -255,35 +254,11 @@ hr {
   border: none;
   border-top: 1px solid var(--hr);
 }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   body {
     font-size: 18px;
   }
   main {
     padding: 1em;
   }
-}
-
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-  clip: rect(1px 1px 1px 1px);
-  /* maybe deprecated but we need to support legacy browsers */
-  clip: rect(1px, 1px, 1px, 1px);
-  /* modern browsers, clip-path works inwards from each corner */
-  clip-path: inset(50%);
-  /* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
-  white-space: nowrap;
-}
-[astro-icon] {
-  color: var(--meta-data);
-  /* OR */
-  fill: var(--meta-data);
-  display: inline-block;
 }

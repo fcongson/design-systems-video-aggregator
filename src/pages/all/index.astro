@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
-import VideoCard from "../../components/VideoCard.astro";
+import MediaGrid from "../../components/MediaGrid.astro";
+import Title from "../../components/Title.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import MediaGrid from "../../layouts/MediaGrid.astro";
 
 const media = (await getCollection("media"))
   .filter((post) => {
@@ -11,38 +11,7 @@ const media = (await getCollection("media"))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 ---
 
-<BaseLayout sidebar={false} baseHeadProps={{ title: "All media" }}>
-  <div class="title">
-    <h1>All media</h1>
-  </div>
-  <MediaGrid>
-    {
-      media.map((media) => (
-        <VideoCard
-          title={media.data.title}
-          poster={media.data.poster}
-          duration={media.data.duration}
-          slug={media.slug}
-          publishedAt={media.data.publishedAt}
-        />
-      ))
-    }
-  </MediaGrid>
+<BaseLayout sidebar={false} metadataProps={{ title: "All media" }}>
+  <Title>All media</Title>
+  <MediaGrid media={media} />
 </BaseLayout>
-
-<style>
-  h2 {
-    padding: 0;
-    margin: 2rem 1rem 0;
-    font-size: 1.5rem;
-  }
-  .title {
-    margin: 3rem auto 0;
-    padding: 1rem;
-    line-height: 1;
-  }
-  .title h1 {
-    margin: 0;
-    text-align: center;
-  }
-</style>

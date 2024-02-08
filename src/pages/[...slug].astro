@@ -1,7 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import MediaPost from "../layouts/MediaPost.astro";
+import MediaPost from "../templates/MediaPost.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("media");
@@ -21,12 +21,7 @@ const headProps = {
 };
 ---
 
-<style>
-  main {
-    max-width: 100%;
-  }
-</style>
-<BaseLayout sidebar={false} fullWidth={true} baseHeadProps={headProps}>
+<BaseLayout sidebar={false} fullWidth={true} metadataProps={headProps}>
   <MediaPost {...post.data} slug={post.slug}>
     <Content />
   </MediaPost>

@@ -2,14 +2,12 @@
 import { getCollection } from "astro:content";
 import Card from "../components/Card.astro";
 import CardHeader from "../components/CardHeader.astro";
-import Footer from "../components/Footer.astro";
 import LibraryStats from "../components/LibraryStats.astro";
+import MediaGrid from "../components/MediaGrid.astro";
 import SectionHeader from "../components/SectionHeader.astro";
-import VideoCard from "../components/VideoCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HomeContent from "../layouts/HomeContent.astro";
-import HomeGrid from "../layouts/HomeGrid.astro";
-import MediaGrid from "../layouts/MediaGrid.astro";
+import Footer from "../layouts/Footer.astro";
+import ResponsiveGrid from "../layouts/ResponsiveGrid.astro";
 
 const media = (await getCollection("media"))
   .filter((post) => {
@@ -27,28 +25,15 @@ const media = (await getCollection("media"))
     linkLabel="View all media"
     padding={true}
   />
-  <MediaGrid>
-    {
-      media.map((media) => (
-        <VideoCard
-          title={media.data.title}
-          poster={media.data.poster}
-          duration={media.data.duration}
-          slug={media.slug}
-          publishedAt={media.data.publishedAt}
-        />
-      ))
-    }
-  </MediaGrid>
-
-  <HomeGrid>
+  <MediaGrid media={media} />
+  <ResponsiveGrid gridLayoutGap="1rem" gridColumnCount={3}>
     <Card>
       <CardHeader
         title="Popular topics"
         link="/tags"
         linkLabel="View all tags"
       />
-      <HomeContent>
+      <div class="home-content">
         <ul>
           <li><a href="/tags/Get%20started">Get started</a></li><li>
             <a href="/tags/Design%20tokens">Design tokens</a>
@@ -56,7 +41,7 @@ const media = (await getCollection("media"))
             <a href="/tags/Color">Color</a>
           </li><li><a href="/tags/Atomic%20design">Atomic design</a></li>
         </ul>
-      </HomeContent>
+      </div>
     </Card>
     <Card>
       <CardHeader
@@ -64,7 +49,7 @@ const media = (await getCollection("media"))
         link="/speakers"
         linkLabel="View all speakers"
       />
-      <HomeContent>
+      <div class="home-content">
         <ul>
           <li><a href="/speakers/Jina%20Anne">Jina Anne</a></li><li>
             <a href="/speakers/Dan%20Mall">Dan Mall</a>
@@ -72,11 +57,11 @@ const media = (await getCollection("media"))
             <a href="/speakers/Nathan%20Curtis">Nathan Curtis</a>
           </li><li><a href="/speakers/Amy%20Hupe">Amy Hupe</a></li>
         </ul>
-      </HomeContent>
+      </div>
     </Card>
     <Card>
       <CardHeader title="Popular events" />
-      <HomeContent>
+      <div class="home-content">
         <ul>
           <li><a href="/tags/Clarity">Clarity</a></li><li>
             <a href="/tags/Design%20Systems%20London">Design Systems London</a>
@@ -90,8 +75,45 @@ const media = (await getCollection("media"))
             <a href="/tags/Smashing">Smashing</a>
           </li>
         </ul>
-      </HomeContent>
+      </div>
     </Card>
-  </HomeGrid>
-  <Footer />
+  </ResponsiveGrid>
 </BaseLayout>
+
+<style>
+  .home-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0rem;
+  }
+
+  .home-content ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0rem;
+    margin-block: 1em 0rem;
+  }
+
+  .home-content ul li {
+    line-height: 1.2rem;
+    margin-block-end: 0.6em;
+  }
+  .home-content ul:last-child {
+    margin-block-end: 0rem;
+  }
+
+  .home-content ul li a {
+    font-size: 1.2rem;
+    color: rgb(var(--accent));
+    text-decoration: none;
+    line-height: 1.1em;
+    border-bottom: 1px solid var(--accent-hover);
+    padding: 0.1em 0 0;
+  }
+
+  .home-content ul li a:hover {
+    color: var(--accent-hover);
+  }
+</style>
