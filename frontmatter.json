@@ -25,8 +25,9 @@
         },
         {
           "title": "Content preview",
-          "name": "preview",
-          "type": "image"
+          "name": "image",
+          "type": "image",
+          "isPreviewImage": true
         },
         {
           "title": "Is in draft",
