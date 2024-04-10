@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "videos": "node scripts/getVideos.js",
+    "podcasts": "node scripts/getPodcasts.js",
     "images": "node scripts/getImages.js",
     "aggregate": "yarn videos && yarn images",
     "dev": "astro dev",

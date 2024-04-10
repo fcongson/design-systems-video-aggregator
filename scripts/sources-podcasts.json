@@ -1,0 +1,15 @@
+[
+  {
+    "type": "podcast-show",
+    "name": "Design System Office Hours"
+  },
+  {
+    "type": "podcast-show",
+    "name": "podcast2"
+  },
+  {
+    "type": "podcast-episode",
+    "podcastUrl": "https://example.com/podcast3",
+    "episodeId": "12345"
+  }
+]
