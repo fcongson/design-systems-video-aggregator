@@ -4,8 +4,8 @@ const path = require("path");
 const slugify = require("slugify");
 const axios = require("axios"); // Add Axios for making HTTP requests
 
-const outputFilename = "data/output-podcasts.json";
-const outputDir = "../src/content/media/";
+const outputFilename = "data/output.json";
+const outputDir = "../src/content/podcast/";
 
 // Load previously imported episode data from output.json if it exists
 let importedEpisodeData = [];
@@ -121,6 +121,12 @@ async function main() {
         for (const episode of episodes) {
           const episodeTitle = episode.title;
           // Implement logic to generate folderPath and check for ignored episodes
+
+          const folderPath = path.join(outputDir, generateUniqueFolderName(episodeTitle)); 
+
+          generateMdxFile(episode, folderPath);
+          allEpisodes.push(episode);
+        
 
           generateMdxFile(episode, folderPath);
           allEpisodes.push(episode);
